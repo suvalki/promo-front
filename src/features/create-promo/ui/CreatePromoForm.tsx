@@ -22,7 +22,7 @@ export const CreatePromoForm = () => {
           {...form.getInputProps("code")}
         />
         <NumberInput
-          label="Скидка (% или ₽)"
+          label="Скидка (%)"
           placeholder="10"
           min={0.01}
           decimalScale={2}

@@ -15,7 +15,8 @@ const schema = z.object({
   code: z.string().min(1, "Введите код промокода"),
   discount: z
     .number({ invalid_type_error: "Введите скидку" })
-    .positive("Скидка должна быть больше 0"),
+    .positive("Скидка должна быть больше 0")
+    .max(100, "Скидка не может быть больше 100"),
   globalLimit: z
     .number({ invalid_type_error: "Введите число" })
     .int("Должно быть целым числом")
