@@ -36,7 +36,10 @@ export const useLoginForm = () => {
     onError: (error: any) => {
       notifications.show({
         title: "Ошибка",
-        message: error.response?.data?.message || "Не удалось войти",
+        message:
+          error.response?.data?.error?.message ||
+          error.response?.data?.message ||
+          "Не удалось войти",
         color: "red",
       });
     },

@@ -120,7 +120,7 @@ export const usePromoTable = () => {
         header: "Использований",
         cell: (info) => {
           const limit = info.row.original.globalLimit;
-          return limit === -1
+          return limit === null
             ? info.getValue()
             : `${info.getValue()} / ${limit}`;
         },

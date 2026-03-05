@@ -5,6 +5,7 @@ import { useUserStore } from "@/entities/user/model/store";
 import { api } from "@/shared/api/base";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router";
 
 const schema = z.object({
   name: z.string().min(2, "Минимум 2 символа"),
@@ -14,7 +15,7 @@ const schema = z.object({
 });
 
 export const useSignupForm = () => {
-  const setUser = useUserStore((state) => state.setUser);
+  const navigate = useNavigate();
 
   const form = useForm({
     initialValues: {
@@ -30,18 +31,20 @@ export const useSignupForm = () => {
     mutationFn: (values: typeof form.values) =>
       api.auth.authControllerSignup(values),
     onSuccess: (data) => {
-      setUser(data);
       notifications.show({
         title: "Успех",
-        message: "Аккаунт успешно создан",
+        message: "Аккаунт успешно создан, теперь вы можете войти",
         color: "green",
       });
+      navigate("/login");
     },
     onError: (error: any) => {
       notifications.show({
         title: "Ошибка",
         message:
-          error.response?.data?.message || "Не удалось зарегистрироваться",
+          error.response?.data?.error?.message ||
+          error.response?.data?.message ||
+          "Не удалось зарегистрироваться",
         color: "red",
       });
     },

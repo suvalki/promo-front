@@ -30,5 +30,4 @@ httpClient.instance.interceptors.response.use(
 
 export const api = new Api(httpClient);
 
-// For backwards compatibility or manual calls if needed
 export const axiosInstance = httpClient.instance;

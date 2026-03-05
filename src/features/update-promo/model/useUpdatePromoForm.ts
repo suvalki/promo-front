@@ -32,14 +32,8 @@ const schema = z.object({
     .int("Должно быть целым числом")
     .min(-1, "Минимальное значение -1")
     .optional(),
-  activeFrom: z
-    .string({ invalid_type_error: "Неверный формат даты" })
-    .nullable()
-    .optional(),
-  expiredAt: z
-    .string({ invalid_type_error: "Неверный формат даты" })
-    .nullable()
-    .optional(),
+  activeFrom: z.union([z.string(), z.date(), z.null()]).optional(),
+  expiredAt: z.union([z.string(), z.date(), z.null()]).optional(),
 });
 
 export type UpdatePromoFormValues = z.infer<typeof schema>;
@@ -53,12 +47,8 @@ export const useUpdatePromoForm = (promo: PromoItem) => {
       discount: promo.discount,
       globalLimit: promo.globalLimit ?? -1,
       userLimit: promo.userLimit ?? -1,
-      activeFrom: promo.activeFrom
-        ? dayjs(promo.activeFrom).toISOString()
-        : undefined,
-      expiredAt: promo.expiredAt
-        ? dayjs(promo.expiredAt).toISOString()
-        : undefined,
+      activeFrom: promo.activeFrom ? dayjs(promo.activeFrom).toDate() : null,
+      expiredAt: promo.expiredAt ? dayjs(promo.expiredAt).toDate() : null,
     },
     validate: zodResolver(schema),
   });
@@ -79,7 +69,7 @@ export const useUpdatePromoForm = (promo: PromoItem) => {
     ) {
       const d = dayjs(value);
       if (!d.isValid() || d.valueOf() <= 0) return null;
-      return d.add(1, "day").toISOString();
+      return d.hour(12).toISOString();
     }
     return value;
   };
